@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  role          Role      @default(CANDIDATE)
+  email         String?   @unique
+  mobile        String?   @unique
+  passwordHash  String?
+  candidateInfo Candidate?
+  documents     Document[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+enum Role {
+  ADMIN
+  CANDIDATE
+}
+
+model Candidate {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  user              User     @relation(fields: [userId], references: [id])
+  firstName         String
+  surname           String
+  fatherName        String
+  motherName        String
+  dob               DateTime
+  address           String
+  passportNo        String   @unique
+  jobAppliedFor     String
+  countryAppliedFor String
+  photoUrl          String
+  status            ApplicationStatus @default(SUBMITTED)
+  
+  // Phase 3 Premium Tracking
+  medicalStatus     TrackingStatus    @default(PENDING)
+  visaStatus        TrackingStatus    @default(PENDING)
+  flightStatus      TrackingStatus    @default(PENDING)
+  
+  interviews        Interview[]
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+enum ApplicationStatus {
+  SUBMITTED
+  UNDER_PROCESSING
+  FIT_FOR_APPLY_PENDING
+  SUCCESSFULLY_APPLIED
+  APPROVED
+  REJECTED
+}
+
+enum TrackingStatus {
+  PENDING
+  IN_PROGRESS
+  APPROVED
+  REJECTED
+}
+
+model Interview {
+  id          String   @id @default(cuid())
+  candidateId String
+  candidate   Candidate @relation(fields: [candidateId], references: [id])
+  date        DateTime
+  location    String   // Zoom link or Physical Address
+  status      InterviewStatus @default(SCHEDULED)
+  createdAt   DateTime @default(now())
+}
+
+enum InterviewStatus {
+  SCHEDULED
+  COMPLETED
+  NO_SHOW
+}
+
+model Document {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  name        String
+  url         String
+  isEncrypted Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
