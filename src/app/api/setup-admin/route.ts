@@ -1,24 +1,29 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import bcrypt from "bcryptjs";
 
 export async function GET() {
   try {
+    const hashedPassword = await bcrypt.hash("admin123", 10);
+    
     const admin = await prisma.user.upsert({
-      where: { email: 'admin@manpower.com' },
-      update: {}, // If it exists, do nothing
+      where: { email: 'admin@admin.com' },
+      update: {
+        passwordHash: hashedPassword
+      },
       create: {
-        email: 'admin@manpower.com',
+        email: 'admin@admin.com',
         role: 'ADMIN',
-        // Password hash is empty, meaning any password will work for testing
+        passwordHash: hashedPassword
       }
     });
 
     return NextResponse.json({ 
       success: true, 
-      message: "Admin account successfully created!", 
+      message: "Admin account successfully created with secure password!", 
       loginDetails: {
-        email: 'admin@manpower.com',
-        password: 'Any password you want (e.g. 12345)'
+        email: 'admin@admin.com',
+        password: 'admin123'
       }
     }, { status: 200 });
 
