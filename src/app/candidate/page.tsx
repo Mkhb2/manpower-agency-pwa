@@ -2,13 +2,14 @@ import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import CandidateDashboard from "@/components/dashboard/CandidateDashboard";
+import { authOptions } from "@/lib/auth";
 
 // Ensure this page is rendered dynamically to fetch real-time application and document data
 export const dynamic = 'force-dynamic';
 
 export default async function CandidatePage() {
   // 1. Validate the Session
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   
   if (!session || !session.user || (session.user as any).role !== "CANDIDATE") {
     redirect("/login");

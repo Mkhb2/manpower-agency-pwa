@@ -3,13 +3,14 @@ import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import AdminDashboard from "@/components/dashboard/AdminDashboard";
 import AdminAnalytics from "@/components/dashboard/AdminAnalytics";
+import { authOptions } from "@/lib/auth";
 
 // Ensure this page is rendered dynamically to always fetch fresh database data
 export const dynamic = 'force-dynamic';
 
 export default async function AdminPage() {
   // 1. Validate the Session
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   
   if (!session || !session.user || (session.user as any).role !== "ADMIN") {
     redirect("/login");
