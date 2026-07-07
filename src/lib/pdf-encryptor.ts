@@ -32,14 +32,7 @@ export const encryptPdf = async (pdfBuffer: Uint8Array, password: string): Promi
   pdfDoc.encrypt({
     userPassword: password,
     ownerPassword: password + '-admin-master', // A strong owner password
-    permissions: {
-      modifying: false,          // Non-editable
-      copying: false,            // Prevent copying text
-      printing: true,            // Allow printing
-      annotating: false,         // Prevent annotations
-      fillingForms: false,
-      modifyingAnnotations: false,
-    },
+    permissions: { printing: 'highResolution', modifying: false, copying: false },
   });
 
   // Save the encrypted PDF
