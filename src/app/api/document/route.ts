@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import prisma from "@/lib/prisma";
 import { createClient } from "@supabase/supabase-js";
+import { authOptions } from "@/lib/auth";
 
 // Initialize Supabase Client
 const supabase = createClient(
@@ -13,7 +14,7 @@ const supabase = createClient(
 export async function GET(req: Request) {
   try {
     // 1. Authenticate Request
-    const session = await getServerSession();
+    const session = await getServerSession(authOptions);
     if (!session || !session.user) {
       return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
     }

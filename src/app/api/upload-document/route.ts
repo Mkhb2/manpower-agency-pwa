@@ -11,10 +11,12 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY || ""
 );
 
+import { authOptions } from "@/lib/auth";
+
 export async function POST(req: Request) {
   try {
     // 1. Authenticate and Authorize
-    const session = await getServerSession();
+    const session = await getServerSession(authOptions);
     if (!session || !session.user || (session.user as any).role !== "ADMIN") {
       return NextResponse.json({ error: "Unauthorized. Only admins can upload documents." }, { status: 403 });
     }
