@@ -2,14 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import prisma from "@/lib/prisma";
 import { PDFDocument } from "pdf-lib-plus-encrypt";
-import { createClient } from "@supabase/supabase-js";
-
-// Initialize Supabase Client for Storage
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || "",
-  process.env.SUPABASE_SERVICE_ROLE_KEY || ""
-);
-
+import { put } from '@vercel/blob';
 import { authOptions } from "@/lib/auth";
 
 export async function POST(req: Request) {
@@ -66,25 +59,18 @@ export async function POST(req: Request) {
 
     const encryptedPdfBytes = await pdfDoc.save();
 
-    // 6. Upload to Supabase Storage Bucket ('manpower-documents')
+    // 6. Upload to Vercel Blob
     const fileName = `${candidate.id}-${Date.now()}.pdf`;
-    const { data: uploadData, error: uploadError } = await supabase.storage
-      .from("manpower-documents")
-      .upload(fileName, encryptedPdfBytes, {
-        contentType: "application/pdf",
-        upsert: false,
-      });
+    const blob = await put(fileName, encryptedPdfBytes, {
+      access: 'public',
+      contentType: 'application/pdf',
+    });
 
-    if (uploadError) {
-      console.error("Supabase Upload Error:", uploadError);
-      throw new Error("Failed to upload to Supabase storage.");
-    }
-
-    // 7. Save metadata in Prisma (saving the Supabase path)
+    // 7. Save metadata in Prisma (saving the Blob URL)
     const newDocument = await prisma.document.create({
       data: {
         name: documentName,
-        url: fileName, // Save the path string (e.g., 'clk...-167...pdf')
+        url: blob.url,
         isEncrypted: true,
         userId: candidate.userId, 
       }

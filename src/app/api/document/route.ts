@@ -1,14 +1,7 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import prisma from "@/lib/prisma";
-import { createClient } from "@supabase/supabase-js";
 import { authOptions } from "@/lib/auth";
-
-// Initialize Supabase Client
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || "",
-  process.env.SUPABASE_SERVICE_ROLE_KEY || ""
-);
 
 export async function GET(req: Request) {
   try {
@@ -44,18 +37,9 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: "Forbidden. You do not have permission to view this document." }, { status: 403 });
     }
 
-    // 5. Generate a Signed URL valid for 60 seconds from the private bucket
-    const { data, error } = await supabase.storage
-      .from("manpower-documents")
-      .createSignedUrl(document.url, 60);
-
-    if (error || !data) {
-      console.error("Supabase Signed URL Error:", error);
-      return NextResponse.json({ error: "Failed to securely retrieve document from Cloud Storage." }, { status: 500 });
-    }
-
-    // 6. Redirect the user securely to the temporary download link
-    return NextResponse.redirect(data.signedUrl);
+    // 5. Redirect the user securely to the unguessable Blob link
+    // The PDF is encrypted with their password, so even if the link leaks, it's secure.
+    return NextResponse.redirect(document.url);
 
   } catch (error: any) {
     console.error("Download Error:", error);
