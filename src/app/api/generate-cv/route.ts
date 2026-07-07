@@ -13,7 +13,8 @@ export async function GET(req: Request) {
 
     // Fetch Candidate Data
     const candidate = await prisma.candidate.findUnique({
-      where: { id: candidateId }
+      where: { id: candidateId },
+      include: { user: true }
     });
 
     if (!candidate) {
@@ -29,23 +30,12 @@ export async function GET(req: Request) {
       dob: candidate.dob.toISOString().split('T')[0],
       address: candidate.address,
       passportNo: candidate.passportNo,
-      mobile: candidate.user?.mobile || "", // Need to fetch via relation if not in candidate model, but based on our schema user relation has mobile. Wait, mobile is in User. We should include user in Prisma query.
+      mobile: candidate.user?.mobile || "",
       email: candidate.user?.email || "",
       jobAppliedFor: candidate.jobAppliedFor,
       countryAppliedFor: candidate.countryAppliedFor,
       photoUrl: candidate.photoUrl
     };
-
-    // Correcting the query to include user relation
-    const candidateWithUser = await prisma.candidate.findUnique({
-      where: { id: candidateId },
-      include: { user: true }
-    });
-    
-    if (candidateWithUser) {
-        cvData.mobile = candidateWithUser.user.mobile || "";
-        cvData.email = candidateWithUser.user.email || "";
-    }
 
     // Generate the PDF Stream
     const pdfStream = await generateCVStream(cvData);
