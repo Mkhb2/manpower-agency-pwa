@@ -107,7 +107,7 @@ export default function CandidateRegistrationForm() {
             <div className="relative group cursor-pointer">
               <div className="w-32 h-32 rounded-full border-4 border-white shadow-xl overflow-hidden bg-slate-100 flex items-center justify-center transition-transform group-hover:scale-105">
                 {photoPreview ? (
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img src={photoPreview} alt="Preview" className="w-full h-full object-cover" />
                 ) : (
                   <User size={48} className="text-slate-300" />
