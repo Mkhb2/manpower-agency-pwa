@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import prisma from "@/lib/prisma";
-import { PDFDocument } from "pdf-lib";
+import { PDFDocument } from "pdf-lib-plus-encrypt";
 import { createClient } from "@supabase/supabase-js";
 
 // Initialize Supabase Client for Storage
