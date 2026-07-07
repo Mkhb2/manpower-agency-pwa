@@ -61,7 +61,7 @@ export default function CandidateDashboard({ candidate, documents }: { candidate
               Your profile data has been automatically compiled into an agency-formatted CV.
             </p>
             <a 
-              href={`/api/candidate/generate-cv?id=${candidate.id}`} 
+              href={`/api/generate-cv?candidateId=${candidate.id}`} 
               className="w-full bg-white text-blue-700 font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 hover:bg-slate-50 transition-colors shadow-sm relative z-10"
             >
               <Download size={18} /> Download My CV
