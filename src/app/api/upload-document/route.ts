@@ -61,7 +61,7 @@ export async function POST(req: Request) {
 
     // 6. Upload to Vercel Blob
     const fileName = `${candidate.id}-${Date.now()}.pdf`;
-    const blob = await put(fileName, encryptedPdfBytes, {
+    const blob = await put(fileName, Buffer.from(encryptedPdfBytes), {
       access: 'public',
       contentType: 'application/pdf',
     });
