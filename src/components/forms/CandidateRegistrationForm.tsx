@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Camera, UploadCloud, User, MapPin, Briefcase, FileText } from "lucide-react";
+import { Camera, UploadCloud, User, MapPin, Briefcase } from "lucide-react";
 
 // --- COMPREHENSIVE COUNTRY LIST ---
 const COUNTRIES = [
@@ -107,6 +107,7 @@ export default function CandidateRegistrationForm() {
             <div className="relative group cursor-pointer">
               <div className="w-32 h-32 rounded-full border-4 border-white shadow-xl overflow-hidden bg-slate-100 flex items-center justify-center transition-transform group-hover:scale-105">
                 {photoPreview ? (
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={photoPreview} alt="Preview" className="w-full h-full object-cover" />
                 ) : (
                   <User size={48} className="text-slate-300" />
@@ -142,12 +143,12 @@ export default function CandidateRegistrationForm() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-slate-700">Father's Name</label>
+              <label className="text-sm font-semibold text-slate-700">Father&apos;s Name</label>
               <input type="text" required className="w-full px-4 py-3 rounded-xl bg-slate-100/50 border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none" placeholder="Robert Doe" />
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-slate-700">Mother's Name</label>
+              <label className="text-sm font-semibold text-slate-700">Mother&apos;s Name</label>
               <input type="text" required className="w-full px-4 py-3 rounded-xl bg-slate-100/50 border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none" placeholder="Mary Doe" />
             </div>
 

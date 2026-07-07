@@ -109,6 +109,7 @@ const CVTemplate = ({ data }: { data: CandidateData }) => (
       {/* Left Column - Sidebar */}
       <View style={styles.leftColumn}>
         {data.photoUrl ? (
+          {/* eslint-disable-next-line jsx-a11y/alt-text */}
           <Image src={data.photoUrl} style={styles.photo} />
         ) : (
           <View style={{...styles.photo, backgroundColor: '#cbd5e1'}} />
@@ -131,11 +132,11 @@ const CVTemplate = ({ data }: { data: CandidateData }) => (
         <Text style={styles.sectionTitleRight}>Personal Information</Text>
         
         <View style={styles.labelRow}>
-          <Text style={styles.label}>Father's Name:</Text>
+          <Text style={styles.label}>{"Father's Name:"}</Text>
           <Text style={styles.value}>{data.fatherName}</Text>
         </View>
         <View style={styles.labelRow}>
-          <Text style={styles.label}>Mother's Name:</Text>
+          <Text style={styles.label}>{"Mother's Name:"}</Text>
           <Text style={styles.value}>{data.motherName}</Text>
         </View>
         <View style={styles.labelRow}>
