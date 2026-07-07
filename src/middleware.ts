@@ -42,6 +42,7 @@ export default withAuth(
       // Always return true to let the middleware function above handle all the routing logic
       authorized: () => true,
     },
+    secret: process.env.NEXTAUTH_SECRET || "v9bJ4T2sX!8#mP7qR5wYc1nZ$lV6aK3d",
   }
 );
 
