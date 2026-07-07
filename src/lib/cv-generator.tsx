@@ -109,7 +109,7 @@ const CVTemplate = ({ data }: { data: CandidateData }) => (
       {/* Left Column - Sidebar */}
       <View style={styles.leftColumn}>
         {data.photoUrl ? (
-          {/* eslint-disable-next-line jsx-a11y/alt-text */}
+          // @ts-ignore - React PDF Image doesn't require alt
           <Image src={data.photoUrl} style={styles.photo} />
         ) : (
           <View style={{...styles.photo, backgroundColor: '#cbd5e1'}} />
