@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { LogIn, Phone, Mail, ShieldAlert } from "lucide-react";
-import { signIn } from "next-auth/react";
+import { signIn, getSession } from "next-auth/react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
@@ -20,18 +20,30 @@ export default function Login() {
     // Call Next-Auth signIn
     const res = await signIn("credentials", {
       emailOrMobile: identifier,
-      password: password || "12345", // Fallback for mobile OTP demo
+      password: password,
       redirect: false,
     });
 
-    setIsLoading(false);
-
     if (res?.error) {
+      setIsLoading(false);
       toast.error("Invalid credentials or account not found.");
     } else {
       toast.success("Successfully logged in!");
-      router.push("/"); // Root will redirect to /admin or /candidate
-      router.refresh(); // Force refresh to get latest session
+      
+      // Fetch session to determine role for proper redirection
+      const session = await getSession();
+      
+      if (session?.user) {
+        if ((session.user as any).role === "ADMIN") {
+          router.push("/admin");
+        } else {
+          router.push("/candidate");
+        }
+      } else {
+        router.push("/");
+      }
+      
+      router.refresh();
     }
   };
 
