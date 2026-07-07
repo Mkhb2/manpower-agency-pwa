@@ -1,4 +1,4 @@
-import { PDFDocument } from 'pdf-lib';
+import { PDFDocument } from 'pdf-lib-plus-encrypt';
 
 /**
  * Generates the password based on candidate's first name and DOB.
